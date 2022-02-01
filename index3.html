@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <div id="app">
+        <tools-bar :cust_element="element" :el_props.sync="new_props"></tools-bar>
+        <!-- <input class="" type="text"> -->
+        <div @click="selected" class="row shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="col-md-4 ">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore cumque aliquam doloribus deserunt harum laboriosam optio, excepturi tempora recusandae quo illum facere perspiciatis officia nemo quod. Dolor sapiente itaque suscipit reiciendis
+                provident adipisci? Cum ad, necessitatibus delectus doloremque placeat, harum esse aspernatur accusamus odit natus illo doloribus magnam aliquam quas architecto voluptatibus cumque sapiente cupiditate ratione quo labore libero. Numquam
+                ducimus incidunt ex aliquam aut sapiente asperiores, dolorem vitae maxime voluptatem velit animi nihil ipsam quis eligendi quos fugiat amet et quae inventore veniam. Minima aperiam enim aliquid eligendi incidunt similique nihil dicta repellat
+                ullam. Ad dignissimos ullam similique aspernatur.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, vitae?</div>
+            <div class="col-md-4 ">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores animi soluta odit ratione! Illo, et voluptatum reiciendis repudiandae iure impedit repellendus voluptate sequi debitis modi voluptas, esse reprehenderit hic, ducimus at animi
+                aliquid dolores quae. Maxime similique magnam quae et odit reprehenderit libero, explicabo soluta tempore illo placeat est aperiam! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab eaque distinctio odio, nihil eos at ipsam
+                consequatur facilis, nulla quas quod impedit accusantium minima sit iusto doloribus. Error ipsum in odit distinctio nisi ipsam exercitationem illum pariatur, deserunt sunt nobis temporibus ipsa. Ex tenetur sequi perspiciatis sint quidem
+                delectus, dolor, iste deleniti qui repellat, deserunt optio molestiae quibusdam dicta esse! Mollitia, accusamus. Quidem illum quod exercitationem recusandae? Aliquid, sapiente minima.</div>
+            <div class="col-md-4 ">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Recusandae provident numquam dolores ipsa deserunt explicabo ad sequi, minima non obcaecati! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Qui tempora molestias esse rem
+                dolor dignissimos praesentium. Molestias, commodi? Praesentium, officia soluta! Nulla modi voluptas quasi aspernatur, vero libero rerum sequi maxime hic qui officia ducimus quisquam itaque, laudantium illo totam alias illum, asperiores
+                culpa dignissimos? Necessitatibus blanditiis labore repellendus voluptas optio a deserunt modi aperiam ducimus excepturi molestiae nemo nobis voluptatem nam dolor dicta minima aliquid delectus debitis, tenetur, dolore hic minus quo! Ea,
+                totam quisquam iure nobis blanditiis ad.</div>
+        </div>
+        <div class="shadow-sm p-3 mb-5 bg-white rounded  row justify-content-md-center">
+            <small>
+                Choose the board and design it
+            </small>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/x-template" id="toolsbar">
+        <div class="rounded-pill bg-warning bar">
+            <h2 class="title">OsApp</h2>
+            <select v-model='prop_element.color' name="colors">
+                <option value="">Text Color</option>
+                <option v-for="(color, i) in colors" :key='i' :value="color">{{color}}</option>
+            </select>
+            <select v-model='prop_element.size' name="sizes">
+                <option value="">Text Size</option>
+                <option v-for="(size, i) in sizes" :key='i' :value="size">{{size}}</option>
+            </select>
+            <select v-model='prop_element.type' name="types">
+                <option value="">Text Type</option>
+                <option v-for="(type, i) in types" :key='i' :value="type">{{type}}</option>
+            </select>
+            <select v-model='prop_element.back_color' name="back_colors">
+                <option value="">Back Color</option>
+                <option v-for="(color, i) in back_colors" :key='i' :value="color">{{color}}</option>
+            </select>
+
+
+        </div>
+    </script>
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                element: {},
+                new_props: {}
+            },
+            methods: {
+                selected(e) {
+                    this.element = e.target
+                }
+            },
+            watch: {
+                new_props: {
+                    handler: function(val) {
+                        this.element.style.color = val.color
+                        this.element.style.fontSize = val.size
+                        this.element.style.fontWeight = val.type
+                        this.element.style.backgroundColor = val.back_color
+                    },
+                    deep: true
+                }
+            },
+            components: {
+                toolsBar: {
+                    template: '#toolsbar',
+                    props: ["cust_element", 'el_props'],
+                    updated() {
+                        this.$emit('update:el_props', this.prop_element)
+                    },
+                    data() {
+                        return {
+                            colors: ['white', '#ff0000', '#0066ff', 'black', '#66ff33'],
+                            sizes: ['10px', '15px', '20px', '25px,', '30px', '35px', '40px'],
+                            types: ['normal', 'Bold', 'italic'],
+                            back_colors: ['white', '#ff4d4d', '#9999ff', 'black', '#cc00cc'],
+                            prop_element: {
+                                color: '',
+                                size: '',
+                                type: '',
+                                back_color: ''
+                            }
+                        }
+                    },
+                    watch: {
+                        cust_element(val) {
+                            this.prop_element.color = val.style.color
+                            this.prop_element.size = val.style.fontSize
+                            this.prop_element.type = val.style.fontStyle
+                            this.prop_element.back_color = val.style.backgroundColor
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+    <style>
+        #app {
+            direction: ltr;
+            margin: 10px 50px 50px 50px;
+        }
+        
+        .bar {
+            text-align: right;
+            border: white 1px solid;
+            padding: 20px;
+        }
+        
+        .bar * {
+            text-align: left;
+            margin: 2px;
+        }
+    </style>
+
+</body>
+
+</html>
